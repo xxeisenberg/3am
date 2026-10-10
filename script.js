@@ -103,6 +103,8 @@ const executeCommand = (command, current) => {
         names.push(child.name);
       }
       return names;
+    case "":
+      return;
     default:
       if (command.startsWith("echo ")) {
         return command.slice(5);
