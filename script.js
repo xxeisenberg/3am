@@ -90,26 +90,39 @@ document.addEventListener("keydown", (k) => {
   }
 });
 
-const executeCommand = (command, current) => {
+const executeCommand = (input, current) => {
+  const [command, ...args] = input.trim().split(" ");
+
   switch (command) {
     case "help":
       return "Available commands: help, clear, echo [text]";
+
     case "clear":
       $("body").innerHTML = '<div id="input-line">admin@station67:~$ </div>';
       return "";
+
     case "ls":
       const names = [];
       for (const child of current.children) {
         names.push(child.name);
       }
       return names;
+
+    case "cat":
+      const result = current.getChild(args[0]);
+      if (result) {
+        return result.content;
+      } else {
+        return "No such file in current directory.";
+      }
+
+    case "echo":
+      return args.join(" ");
+
     case "":
       return;
+
     default:
-      if (command.startsWith("echo ")) {
-        return command.slice(5);
-      } else {
-        return `Command not found: ${command}`;
-      }
+      return `Command not found: ${command}`;
   }
 };
