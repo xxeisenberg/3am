@@ -41,3 +41,36 @@ body {
     user-select: none;
     font-weight: bold;
 }
+
+.status-left, .status-right {
+    display: flex;
+    align-items: stretch;
+}
+
+.seg {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.seg-host {
+    background: #330a0a;
+    color: #ff8888;
+}
+
+.seg-path {
+    background: #1c0505;
+    color: #ff5555;
+}
+
+.seg-evidence {
+    background: #2a0808;
+    color: #ffaa44;
+}
+
+.seg-timer {
+    background: #ff2222;
+    color: #000000;
+    min-width: 58px;
+    justify-content: center;
+}

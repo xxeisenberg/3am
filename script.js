@@ -148,13 +148,17 @@ const executeCommand = (input, curr) => {
           return "You are at the root directory.";
         }
         current = curr.parent;
+        updatePath();
         return "";
       }
 
       const result = curr.getChild(args[0]);
 
-      if (result.isDir) {
+      if (result?.isDir) {
         current = result;
+        updatePath();
+      } else {
+        return `No directory named ${args[0]} is here.`;
       }
 
       return "";
@@ -170,4 +174,18 @@ const executeCommand = (input, curr) => {
     default:
       return `Command not found: ${command}`;
   }
+};
+
+const getPath = (node) => {
+  if (node === root) {
+    return "/";
+  }
+
+  const fullPath = "/" + node.name;
+
+  return fullPath;
+};
+
+const updatePath = () => {
+  $("sg-path").textContent = getPath(current);
 };
