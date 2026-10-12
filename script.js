@@ -119,12 +119,21 @@ const executeCommand = (input, curr) => {
       }
     }
     case "cd": {
-      console.log(current);
+      if (args[0] === "..") {
+        if (curr.parent === null) {
+          return "You are at the root directory.";
+        }
+        current = curr.parent;
+        return "";
+      }
+
       const result = curr.getChild(args[0]);
+
       if (result.isDir) {
         current = result;
       }
-      console.log(current);
+
+      return "";
     }
 
     case "echo": {
