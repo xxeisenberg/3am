@@ -81,7 +81,30 @@ document.addEventListener("keydown", (k) => {
     k.key === "Tab" ||
     k.key === "Shift" ||
     k.key === "Control" ||
-    k.key === "Alt"
+    k.key === "Alt" ||
+    k.key === "Meta" ||
+    k.key === "ArrowLeft" ||
+    k.key === "ArrowRight" ||
+    k.key === "ArrowUp" ||
+    k.key === "ArrowDown" ||
+    k.key === "PageUp" ||
+    k.key === "PageDown" ||
+    k.key === "Delete" ||
+    k.key === "Insert" ||
+    k.key === "PrintScreen" ||
+    k.key === "F1" ||
+    k.key === "F2" ||
+    k.key === "F3" ||
+    k.key === "F4" ||
+    k.key === "F5" ||
+    k.key === "F6" ||
+    k.key === "F7" ||
+    k.key === "F8" ||
+    k.key === "F9" ||
+    k.key === "F10" ||
+    k.key === "F11" ||
+    k.key === "F12" ||
+    k.key === "Escape"
   ) {
     // Do nothing for these keys
   } else {
