@@ -77,6 +77,7 @@ document.addEventListener("keydown", (k) => {
       outputDiv.innerHTML = output;
       body.insertBefore(outputDiv, $("input-line"));
     }
+    body.scrollTop = body.scrollHeight;
   } else if (
     k.key === "Tab" ||
     k.key === "Shift" ||
