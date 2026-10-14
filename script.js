@@ -1,6 +1,29 @@
 import { TreeNode } from "./fs.js";
 
 const $ = (id) => document.getElementById(id);
+let step = 0;
+
+const screens = [
+  `OCTOBER 31 // 02:57 AM<br><br>Every TV in the valley just went white.<br>The old tower on Blackwood Ridge is on. It shouldn't be.<br><br>You forced the door open. The transmitter's hot enough to burn you.<br>Something's walking around on the roof.<br><br><span style="color: #fff;">[ PRESS ENTER ]</span>`,
+
+  `[01 / 03]<br><br>The station's been looping the same broadcast since 1974.<br>People are falling asleep in front of their TVs. None of them have woken up.<br><br><span style="color: #fff;">[ PRESS ENTER ]</span>`,
+
+  `[02 / 03]<br><br>Find the three logs: the hijack schedule, the victim ledger, and the original frequency.<br>The vault won't open. There should be an override code somewhere in the desk memos.<br><br><span style="color: #fff;">[ PRESS ENTER ]</span>`,
+
+  `[03 / 03]<br><br>Shit. The thermite purge is armed.<br>03:00 AM. That's three minutes from now.<br><br>Get the files. Type 'extract'. Don't stick around.<br><br><span style="color: #fff;">[ PRESS ENTER TO START ]</span>`,
+];
+
+const printStep = (idx) => {
+  const body = $("body");
+  const block = document.createElement("div");
+  block.className = "output";
+  block.innerHTML = screens[idx];
+  body.insertBefore(block, $("input-line"));
+  body.scrollTop = body.scrollHeight;
+};
+
+$("input-line").textContent = "";
+printStep(0);
 
 // Creating the Filesystem
 const root = new TreeNode("/", true);
@@ -55,6 +78,19 @@ root.addChild(vault);
 let current = root;
 
 document.addEventListener("keydown", (k) => {
+  if (step < screens.length) {
+    if (k.key === "Enter") {
+      step++;
+
+      if (step < screens.length) {
+        printStep(step);
+      } else {
+        $("body").innerHTML = `<div id="input-line">admin@station67:~$ </div>`;
+      }
+    }
+    return;
+  }
+
   if (k.key === "Backspace") {
     const text = $("input-line").textContent;
     if (text.length > 19) {
@@ -119,7 +155,7 @@ const executeCommand = (input, curr) => {
 
   switch (command) {
     case "help":
-      return "Available commands: help, clear, echo [text]";
+      return "Available commands: help, ls, cd, cat, clear, echo [text]";
 
     case "clear": {
       $("body").innerHTML = '<div id="input-line">admin@station67:~$ </div>';
