@@ -2,6 +2,7 @@ import { TreeNode } from "./fs.js";
 
 const $ = (id) => document.getElementById(id);
 let step = 0;
+let GAMEOVER = false;
 
 const screens = [
   `OCTOBER 31 // 02:57 AM<br><br>Every TV in the valley just went white.<br>The old tower on Blackwood Ridge is on. It shouldn't be.<br><br>You forced the door open. The transmitter's hot enough to burn you.<br>Something's walking around on the roof.<br><br><span style="color: #fff;">[ PRESS ENTER ]</span>`,
@@ -86,6 +87,7 @@ document.addEventListener("keydown", (k) => {
         printStep(step);
       } else {
         $("body").innerHTML = `<div id="input-line">admin@station67:~$ </div>`;
+        startTimer();
       }
     }
     return;
@@ -224,4 +226,24 @@ const getPath = (node) => {
 
 const updatePath = () => {
   $("sg-path").textContent = getPath(current);
+};
+
+const startTimer = () => {
+  let SECONDS = 180; // 3mins
+
+  const interval = setInterval(() => {
+    SECONDS--;
+
+    if (SECONDS === 0) {
+      clearInterval(interval);
+      GAMEOVER = true;
+    }
+
+    let minutes = Math.floor(SECONDS / 60);
+    let seconds = SECONDS % 60;
+    console.log(SECONDS);
+
+    $("sg-timer").textContent =
+      `0${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }, 1000);
 };
