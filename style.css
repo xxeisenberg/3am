@@ -76,3 +76,12 @@ body {
     min-width: 58px;
     justify-content: center;
 }
+
+#yt-bg {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    opacity: 0.01;
+    pointer-events: none;
+    z-index: -100;
+}

@@ -4,6 +4,29 @@ import { BASE64_SOUNDS } from "./sounds.js";
 const $ = (id) => document.getElementById(id);
 let step = 0;
 let GAMEOVER = false;
+let ytPlayer = null;
+let bgStarted = false;
+
+const randomStartSecond = Math.floor(Math.random() * 10200); // 0 to 2h50m
+
+window.onYouTubeIframeAPIReady = () => {
+  ytPlayer = new YT.Player("yt-bg", {
+    height: "1",
+    width: "1",
+    videoId: "F2w4BMKc3pw",
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      loop: 1,
+      start: randomStartSecond,
+    },
+    events: {
+      onReady: (e) => {
+        e.target.setVolume(4);
+      },
+    },
+  });
+};
 
 const ctx = new window.AudioContext();
 const buffers = {};
@@ -110,6 +133,12 @@ document.addEventListener("keydown", (k) => {
       ? k.code
       : `generic${Math.floor(Math.random() * 5)}`;
     playSound(soundName);
+  }
+
+  if (!bgStarted && ytPlayer) {
+    ytPlayer.seekTo(randomStartSecond, true);
+    ytPlayer.playVideo();
+    bgStarted = true;
   }
 
   if (step < screens.length) {
@@ -282,7 +311,6 @@ const startTimer = () => {
 
     let minutes = Math.floor(SECONDS / 60);
     let seconds = SECONDS % 60;
-    console.log(SECONDS);
 
     $("sg-timer").textContent =
       `0${minutes}:${seconds.toString().padStart(2, "0")}`;
