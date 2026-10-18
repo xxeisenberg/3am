@@ -1,8 +1,34 @@
 import { TreeNode } from "./fs.js";
+import { BASE64_SOUNDS } from "./sounds.js";
 
 const $ = (id) => document.getElementById(id);
 let step = 0;
 let GAMEOVER = false;
+
+const ctx = new window.AudioContext();
+const buffers = {};
+
+const loadBase64Audio = async () => {
+  for (const [name, base] of Object.entries(BASE64_SOUNDS)) {
+    const binary = atob(base);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    buffers[name] = await ctx.decodeAudioData(bytes.buffer);
+  }
+};
+loadBase64Audio();
+
+const playSound = (name) => {
+  const buf = buffers[name];
+  if (!buf) return;
+
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.connect(ctx.destination);
+  src.start(0);
+};
 
 const screens = [
   `OCTOBER 31 // 02:57 AM<br><br>Every TV in the valley just went white.<br>The old tower on Blackwood Ridge is on. It shouldn't be.<br><br>You forced the door open. The transmitter's hot enough to burn you.<br>Something's walking around on the roof.<br><br><span style="color: #fff;">[ PRESS ENTER ]</span>`,
@@ -79,6 +105,13 @@ root.addChild(vault);
 let current = root;
 
 document.addEventListener("keydown", (k) => {
+  if (!k.repeat) {
+    const soundName = ["Space", "Enter", "Backspace"].includes(k.code)
+      ? k.code
+      : `generic${Math.floor(Math.random() * 5)}`;
+    playSound(soundName);
+  }
+
   if (step < screens.length) {
     if (k.key === "Enter") {
       step++;
@@ -150,6 +183,14 @@ document.addEventListener("keydown", (k) => {
     const text = $("input-line").textContent;
     $("input-line").textContent = text + k.key;
   }
+});
+
+window.addEventListener("keyup", (k) => {
+  const soundName = ["Space", "Backspace"].includes(k.code)
+    ? `up_${k.code}`
+    : `up_generic`;
+
+  playSound(soundName);
 });
 
 const executeCommand = (input, curr) => {
