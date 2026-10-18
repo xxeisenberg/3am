@@ -4,6 +4,7 @@ import { BASE64_SOUNDS } from "./sounds.js";
 const $ = (id) => document.getElementById(id);
 let step = 0;
 let GAMEOVER = false;
+let locked = true;
 let ytPlayer = null;
 let bgStarted = false;
 
@@ -244,7 +245,7 @@ const executeCommand = (input, curr) => {
 
     case "cat": {
       const result = curr.getChild(args[0]);
-      if (!result.isDir) {
+      if (result && !result.isDir) {
         return result.content;
       } else {
         return "No such file in current directory.";
@@ -263,6 +264,9 @@ const executeCommand = (input, curr) => {
       const result = curr.getChild(args[0]);
 
       if (result?.isDir) {
+        if (result.name === "vault" && locked) {
+          return "Vault is locked. Use 'unlock [pin]' to open.";
+        }
         current = result;
         updatePath();
       } else {
@@ -270,6 +274,15 @@ const executeCommand = (input, curr) => {
       }
 
       return "";
+    }
+
+    case "unlock": {
+      if (args[0] === "1974") {
+        locked = false;
+        return "Vault unlocked.";
+      } else {
+        return "Wrong pin.";
+      }
     }
 
     case "echo": {
