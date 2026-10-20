@@ -171,7 +171,6 @@ document.addEventListener("keydown", (k) => {
     child.textContent = $("input-line").textContent;
     const command = $("input-line").textContent.slice(19);
     const output = executeCommand(command, current);
-    console.log(output);
     $("input-line").textContent = "admin@station67:~$ ";
     if (command !== "clear") {
       body.insertBefore(child, $("input-line"));
