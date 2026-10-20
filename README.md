@@ -29,3 +29,5 @@ python3 -m http.server 8000
 # or use the VS Code Live Server extension
 ```
 then open `127.0.0.1:8000`
+
+or visit the hosted version [3am.x44.diy](https://3am.x44.diy)
