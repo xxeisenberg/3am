@@ -6,6 +6,7 @@ let step = 0;
 let GAMEOVER = false;
 let locked = true;
 let collected = [];
+let timer = null;
 let ytPlayer = null;
 let bgStarted = false;
 
@@ -24,7 +25,7 @@ window.onYouTubeIframeAPIReady = () => {
     },
     events: {
       onReady: (e) => {
-        e.target.setVolume(4);
+        e.target.setVolume(10);
       },
     },
   });
@@ -130,6 +131,8 @@ root.addChild(vault);
 let current = root;
 
 document.addEventListener("keydown", (k) => {
+  if (GAMEOVER) return;
+
   if (!k.repeat) {
     const soundName = ["Space", "Enter", "Backspace"].includes(k.code)
       ? k.code
@@ -307,6 +310,7 @@ const executeCommand = (input, curr) => {
       }
 
       GAMEOVER = true;
+      clearInterval(timer);
       if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
 
       $("body").innerHTML = `
@@ -347,18 +351,27 @@ const updatePath = () => {
 const startTimer = () => {
   let SECONDS = 180; // 3mins
 
-  const interval = setInterval(() => {
+  timer = setInterval(() => {
     SECONDS--;
-
-    if (SECONDS === 0) {
-      clearInterval(interval);
-      GAMEOVER = true;
-    }
 
     let minutes = Math.floor(SECONDS / 60);
     let seconds = SECONDS % 60;
 
     $("sg-timer").textContent =
       `0${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+    if (SECONDS <= 0) {
+      clearInterval(timer);
+      GAMEOVER = true;
+      if (ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(50);
+
+      $("body").innerHTML = `
+      <div class="output" style="color: #ff4444;">
+        3:00 AM // THERMITE PURGE DETONATED<br><br>
+        The console locks up as white smoke vents through the floor  grates.<br> 
+        Heat burns through the transmitter racks. You didn't ge out in time.<br><br>
+        <span style="color: white;">[ TRANSMISSION TERMINATION - REFRESH TO RETRY ]</span>
+      </div>`;
+    }
   }, 1000);
 };
