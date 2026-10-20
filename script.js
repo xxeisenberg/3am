@@ -229,7 +229,7 @@ const executeCommand = (input, curr) => {
 
   switch (command) {
     case "help":
-      return "Available commands: help, ls, cd, cat, clear, echo [text]";
+      return "Available commands: help, ls, cd, cat, unlock, extract, clear, echo [text]";
 
     case "clear": {
       $("body").innerHTML = '<div id="input-line">admin@station67:~$ </div>';
