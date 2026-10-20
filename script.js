@@ -5,6 +5,7 @@ const $ = (id) => document.getElementById(id);
 let step = 0;
 let GAMEOVER = false;
 let locked = true;
+let collected = [];
 let ytPlayer = null;
 let bgStarted = false;
 
@@ -137,7 +138,6 @@ document.addEventListener("keydown", (k) => {
   }
 
   if (!bgStarted && ytPlayer) {
-    ytPlayer.seekTo(randomStartSecond, true);
     ytPlayer.playVideo();
     bgStarted = true;
   }
@@ -168,6 +168,7 @@ document.addEventListener("keydown", (k) => {
     child.textContent = $("input-line").textContent;
     const command = $("input-line").textContent.slice(19);
     const output = executeCommand(command, current);
+    console.log(output);
     $("input-line").textContent = "admin@station67:~$ ";
     if (command !== "clear") {
       body.insertBefore(child, $("input-line"));
@@ -246,6 +247,21 @@ const executeCommand = (input, curr) => {
     case "cat": {
       const result = curr.getChild(args[0]);
       if (result && !result.isDir) {
+        const targets = [
+          "active_queue.dat",
+          "carrier_config.cfg",
+          "carrier_victims.csv",
+        ];
+
+        if (targets.includes(result.name) && !collected.includes(result.name)) {
+          collected.push(result.name);
+          $("sg-evid").textContent = `EVID: ${collected.length}/3`;
+          return (
+            result.content +
+            `<br><br><span style="color: #309430;">[DOWNLOADED ${collected.length}/3 EVIDENCE FILES]</span>`
+          );
+        }
+
         return result.content;
       } else {
         return "No such file in current directory.";
@@ -283,6 +299,23 @@ const executeCommand = (input, curr) => {
       } else {
         return "Wrong pin.";
       }
+    }
+
+    case "extract": {
+      if (collected.length < 3) {
+        return `Extraction failed. Only ${collected.length}/3 evidence files found.`;
+      }
+
+      GAMEOVER = true;
+      if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+
+      $("body").innerHTML = `
+      <div class="output" style="color: #4af626;">
+        EXTRACTION SECCESSFUL // ALL 3 LOGS SECURED<br><br>
+        You have secured the logs with you and escaped down Blackwood Ridge.<br>
+        At 3:00 AM, the tower purges behind you, but the evidence is safe.<br><br>
+        <span style="color: white;">[YOU SURVIVED - REFRESH TO PLAY AGAIN]</span> 
+    </div>`;
     }
 
     case "echo": {
