@@ -9,13 +9,13 @@ let collected = [];
 let ytPlayer = null;
 let bgStarted = false;
 
-const randomStartSecond = Math.floor(Math.random() * 10200); // 0 to 2h50m
+const randomStartSecond = Math.floor(Math.random() * 35400); // 0 to 9h50m
 
 window.onYouTubeIframeAPIReady = () => {
   ytPlayer = new YT.Player("yt-bg", {
     height: "1",
     width: "1",
-    videoId: "F2w4BMKc3pw",
+    videoId: "Z6ylGHfLrdI",
     playerVars: {
       autoplay: 0,
       controls: 0,
